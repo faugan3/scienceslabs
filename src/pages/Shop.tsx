@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Search, Filter, Grid, List, ShoppingCart, ChevronDown, ChevronRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
@@ -89,7 +90,7 @@ const Shop = () => {
 
   const products = [
     {
-      id: 1,
+      id: 'BCH-050',
       name: 'Bécher en Verre Borosilicate 50ml',
       category: 'chemistry',
       subCategory: 'beakers',
@@ -101,15 +102,10 @@ const Shop = () => {
       reviews: 24,
       inStock: true,
       isNew: true,
-      variants: [
-        { size: '50ml', price: 8500, stock: 25 },
-        { size: '100ml', price: 12000, stock: 20 },
-        { size: '150ml', price: 15000, stock: 18 },
-        { size: '200ml', price: 18000, stock: 15 }
-      ]
+      hasVariants: true
     },
     {
-      id: 2,
+      id: 'BCH-100',
       name: 'Bécher en Verre Borosilicate 100ml',
       category: 'chemistry',
       subCategory: 'beakers',
@@ -119,10 +115,11 @@ const Shop = () => {
       rating: 4.8,
       reviews: 24,
       inStock: true,
-      isNew: false
+      isNew: false,
+      hasVariants: true
     },
     {
-      id: 3,
+      id: 'BCH-150',
       name: 'Bécher en Verre Borosilicate 150ml',
       category: 'chemistry',
       subCategory: 'beakers',
@@ -132,10 +129,11 @@ const Shop = () => {
       rating: 4.8,
       reviews: 24,
       inStock: true,
-      isNew: false
+      isNew: false,
+      hasVariants: true
     },
     {
-      id: 4,
+      id: 'BCH-200',
       name: 'Bécher en Verre Borosilicate 200ml',
       category: 'chemistry',
       subCategory: 'beakers',
@@ -145,10 +143,11 @@ const Shop = () => {
       rating: 4.8,
       reviews: 24,
       inStock: true,
-      isNew: false
+      isNew: false,
+      hasVariants: true
     },
     {
-      id: 5,
+      id: 'MIC-BIN-001',
       name: 'Microscope Binoculaire',
       category: 'biology',
       subCategory: 'microscopes',
@@ -158,10 +157,11 @@ const Shop = () => {
       rating: 4.9,
       reviews: 18,
       inStock: true,
-      isNew: false
+      isNew: false,
+      hasVariants: false
     },
     {
-      id: 6,
+      id: 'OSC-001',
       name: 'Oscilloscope Numérique',
       category: 'physics',
       subCategory: 'electricity',
@@ -171,10 +171,11 @@ const Shop = () => {
       rating: 4.7,
       reviews: 12,
       inStock: false,
-      isNew: false
+      isNew: false,
+      hasVariants: false
     },
     {
-      id: 7,
+      id: 'ARM-SEC-001',
       name: 'Armoire de Sécurité',
       category: 'safety',
       subCategory: 'storage',
@@ -184,10 +185,11 @@ const Shop = () => {
       rating: 4.8,
       reviews: 8,
       inStock: true,
-      isNew: true
+      isNew: true,
+      hasVariants: false
     },
     {
-      id: 8,
+      id: 'PAIL-001',
       name: 'Paillasse de Laboratoire',
       category: 'furniture',
       subCategory: 'benches',
@@ -197,7 +199,8 @@ const Shop = () => {
       rating: 4.5,
       reviews: 15,
       inStock: true,
-      isNew: false
+      isNew: false,
+      hasVariants: false
     }
   ];
 
@@ -392,14 +395,21 @@ const Shop = () => {
               {filteredProducts.map(product => (
                 <div key={product.id} className={`bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 ${viewMode === 'list' ? 'flex' : ''}`}>
                   <div className={`relative ${viewMode === 'list' ? 'w-48 h-48' : 'h-48'} overflow-hidden`}>
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
+                    <Link to={`/produit/${product.id}`}>
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300 cursor-pointer"
+                      />
+                    </Link>
                     {product.isNew && (
                       <div className="absolute top-2 left-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-semibold">
                         Nouveau
+                      </div>
+                    )}
+                    {product.hasVariants && (
+                      <div className="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                        Variantes
                       </div>
                     )}
                     {!product.inStock && (
@@ -409,7 +419,11 @@ const Shop = () => {
                     )}
                   </div>
                   <div className={`p-6 ${viewMode === 'list' ? 'flex-1' : ''}`}>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{product.name}</h3>
+                    <Link to={`/produit/${product.id}`}>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2 hover:text-blue-600 transition-colors cursor-pointer">
+                        {product.name}
+                      </h3>
+                    </Link>
                     <p className="text-gray-600 text-sm mb-3">{product.description}</p>
                     <div className="flex items-center mb-3">
                       <div className="flex items-center">
@@ -419,20 +433,6 @@ const Shop = () => {
                       </div>
                       <span className="text-sm text-gray-500 ml-2">({product.reviews} avis)</span>
                     </div>
-                    
-                    {/* Product Variants */}
-                    {product.variants && (
-                      <div className="mb-3">
-                        <p className="text-xs text-gray-500 mb-1">Tailles disponibles:</p>
-                        <div className="flex flex-wrap gap-1">
-                          {product.variants.map((variant, index) => (
-                            <span key={index} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs">
-                              {variant.size}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                     
                     <div className="flex justify-between items-center">
                       <div>

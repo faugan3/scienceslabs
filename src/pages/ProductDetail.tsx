@@ -121,8 +121,10 @@ const ProductDetail = () => {
   const getProductFromId = (productId: string) => {
     if (productId?.startsWith('BCH-')) {
       return productData.beakers;
+    } else if (productId === 'MIC-BIN-001') {
+      return productData.microscope;
     }
-    return productData.microscope;
+    return productData.beakers; // Default fallback
   };
 
   const product = getProductFromId(id || '');
@@ -149,7 +151,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     addToCart({
-      id: selectedVariant ? parseInt(selectedVariant.id.replace(/[^0-9]/g, '')) : product.id,
+      id: selectedVariant ? selectedVariant.id : product.id,
       name: currentProduct.name,
       price: currentProduct.price,
       image: currentProduct.image || product.images[0],
@@ -401,17 +403,17 @@ const ProductDetail = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
-                          <button
-                            onClick={() => handleVariantSelect(variant)}
+                          <Link
+                            to={`/produit/${variant.id}`}
                             className="text-blue-600 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 px-3 py-1 rounded-lg transition-colors"
                           >
                             Voir détails
-                          </button>
+                          </Link>
                           {variant.inStock && (
                             <button
                               onClick={() => {
                                 addToCart({
-                                  id: parseInt(variant.id.replace(/[^0-9]/g, '')),
+                                  id: variant.id,
                                   name: variant.name,
                                   price: variant.price,
                                   image: variant.image,

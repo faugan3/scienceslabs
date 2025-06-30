@@ -12,6 +12,7 @@ import Contact from './pages/Contact';
 import Cart from './pages/Cart';
 import Dashboard from './pages/Dashboard';
 import Management from './pages/Management';
+import AdminDashboard from './pages/AdminDashboard';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { ManagementProvider } from './context/ManagementContext';
@@ -36,6 +37,7 @@ function App() {
                   <Route path="/panier" element={<Cart />} />
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/gestion" element={<Management />} />
+                  <Route path="/admin" element={<AdminDashboard />} />
                 </Routes>
               </main>
               <Footer />
